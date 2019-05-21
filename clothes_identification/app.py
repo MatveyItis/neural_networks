@@ -43,8 +43,21 @@ model.compile(loss="categorical_crossentropy", optimizer="SGD", metrics=["accura
 print(model.summary())
 
 # обучаем сеть
-model.fit(x_train, y_train, batch_size=200, epochs=100, verbose=1)
+model.fit(x_train, y_train, validation_split=0.3, batch_size=200, epochs=100, verbose=1)
+# сохраняем нашу сеть для дальнейшего использования без тренировки
+model.save('fashion_mnist_dense.h5')
 
+# если хотим использовать модель, то делаем так:
+# from tensorflow.python.keras.models import load_model
+# model = load_model('fashion_mnist_dense.h5')
+# prediction = model.predict(x_test)
+
+# оцениваем качество обучения сети на тестовых данных
+scores = model.evaluate(x_test, y_test, verbose=1)
+
+print("Доля верных ответов на тестовых данных в процентах:", round(scores[1] * 100, 4))
+
+# предсказание
 predictions = model.predict(x_train)
 
 n = 0
